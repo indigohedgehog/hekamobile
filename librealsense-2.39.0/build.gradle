@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('librealsense-2.39.0.aar'))

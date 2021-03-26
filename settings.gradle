@@ -1,0 +1,5 @@
+include ':thermalsdk-release'
+include ':androidsdk-release'
+include ':librealsense-2.39.0'
+include ':app'
+rootProject.name = "hekamobile"

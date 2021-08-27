@@ -44,11 +44,10 @@ class MainActivity : AppCompatActivity() {
     private var mPipeline: Pipeline? = null
     private var mColorizer: Colorizer? = null
     private var mRsContext: RsContext? = null
-    private val TAG = "librs capture example"
 
     private val mHandler: Handler = Handler()
 
-    //private val TAG = "MainActivity"
+    private val TAG = "MainActivity"
 
     //Handles Android permission for eg Network
     private var permissionHandler: PermissionHandler? = null
@@ -85,8 +84,6 @@ class MainActivity : AppCompatActivity() {
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
         // Android 9 also requires camera permissions
-
-        // Android 9 also requires camera permissions
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.O &&
                 ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), PERMISSIONS_REQUEST_CAMERA)
@@ -96,10 +93,6 @@ class MainActivity : AppCompatActivity() {
         mPermissionsGranted = true
 
         val enableLoggingInDebug = if (BuildConfig.DEBUG) LogLevel.DEBUG else LogLevel.NONE
-
-        //ThermalSdkAndroid has to be initiated from a Activity with the Application Context to prevent leaking Context,
-        // and before ANY using any ThermalSdkAndroid functions
-        //ThermalLog will show log from the Thermal SDK in standards android log framework
 
         //ThermalSdkAndroid has to be initiated from a Activity with the Application Context to prevent leaking Context,
         // and before ANY using any ThermalSdkAndroid functions

@@ -11,8 +11,8 @@ import com.flir.thermalsdk.live.connectivity.ConnectionStatusListener
 import com.flir.thermalsdk.live.discovery.DiscoveryEventListener
 import com.flir.thermalsdk.live.discovery.DiscoveryFactory
 import com.flir.thermalsdk.live.streaming.ThermalImageStreamListener
-import com.flir.thermalsdk.live.Camera;
-import com.flir.thermalsdk.live.Identity;
+import com.flir.thermalsdk.live.Camera
+import com.flir.thermalsdk.live.Identity
 
 
 import org.jetbrains.annotations.Nullable
@@ -20,28 +20,9 @@ import org.jetbrains.annotations.Nullable
 import java.io.IOException
 import java.util.Collections
 import java.util.LinkedList
-import java.util.List
-/**
-* Encapsulates the handling of a FLIR ONE camera or built in emulator, discovery, connecting and start receiving images.
-* All listeners are called from Thermal SDK on a non-ui thread
-* <p/>
-* Usage:
-* <pre>
-* Start discovery of FLIR FLIR ONE cameras or built in FLIR ONE cameras emulators
-* {@linkplain #startDiscovery(DiscoveryEventListener, DiscoveryStatus)}
-* Use a discovered Camera {@linkplain Identity} and connect to the Camera
-* (note that calling connect is blocking and it is mandatory to call this function from a background thread):
-* {@linkplain #connect(Identity, ConnectionStatusListener)}
-* Once connected to a camera
-* {@linkplain #startStream(StreamDataListener)}
-* </pre>
-* <p/>
-* You don't *have* to specify your application to listen or USB intents but it might be beneficial for you application,
-* we are enumerating the USB devices during the discovery process which eliminates the need to listen for USB intents.
-* See the Android documentation about USB Host mode for more information
-* <p/>
-* Please note, this is <b>NOT</b> production quality code, error handling has been kept to a minimum to keep the code as clear and concise as possible
-*/
+
+
+
 class CameraHandler {
     private val TAG = "CameraHandler"
 
@@ -52,11 +33,7 @@ class CameraHandler {
         fun images(msxBitmap: Bitmap?, dcBitmap: Bitmap?)
     }
 
-
-    //Discovered FLIR cameras
     var foundCameraIdentities: LinkedList<Identity> = LinkedList()
-
-    //A FLIR Camera
     private var camera: Camera? = null
 
 
@@ -65,22 +42,11 @@ class CameraHandler {
         fun stopped()
     }
 
-    constructor () {
-
-    }
-
-    /**
-     * Start discovery of USB and Emulators
-     */
     fun startDiscovery(cameraDiscoveryListener: DiscoveryEventListener?, discoveryStatus: DiscoveryStatus) {
         DiscoveryFactory.getInstance().scan(cameraDiscoveryListener!!, CommunicationInterface.EMULATOR, CommunicationInterface.USB)
         discoveryStatus.started()
     }
 
-
-    /**
-     * Stop discovery of USB and Emulators
-     */
     fun stopDiscovery(discoveryStatus: DiscoveryStatus) {
         DiscoveryFactory.getInstance().stop(CommunicationInterface.EMULATOR, CommunicationInterface.USB)
         discoveryStatus.stopped()
@@ -102,24 +68,15 @@ class CameraHandler {
         camera?.disconnect()
     }
 
-    /**
-     * Start a stream of [ThermalImage]s images from a FLIR ONE or emulator
-     */
     fun startStream(listener: StreamDataListener?) {
         streamDataListener = listener
         camera?.subscribeStream(thermalImageStreamListener)
     }
 
-    /**
-     * Stop a stream of [ThermalImage]s images from a FLIR ONE or emulator
-     */
     fun stopStream(listener: ThermalImageStreamListener?) {
         camera?.unsubscribeStream(listener)
     }
 
-    /**
-     * Add a found camera to the list of known cameras
-     */
     fun add(identity: Identity) {
         foundCameraIdentities.add(identity)
     }
@@ -129,9 +86,6 @@ class CameraHandler {
         return foundCameraIdentities.get(i)
     }
 
-    /**
-     * Get a read only list of all found cameras
-     */
     @Nullable
     fun getCameraList(): MutableList<Identity> {
         return Collections.unmodifiableList(foundCameraIdentities)
@@ -180,10 +134,6 @@ class CameraHandler {
         camera?.withImage(listener, functionToRun)
     }
 
-
-    /**
-     * Called whenever there is a new Thermal Image available, should be used in conjunction with [Camera.Consumer]
-     */
     private val thermalImageStreamListener: ThermalImageStreamListener = object : ThermalImageStreamListener {
         override fun onImageReceived() {
             //Will be called on a non-ui thread
